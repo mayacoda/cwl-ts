@@ -10,10 +10,12 @@ import {ExpressionEvaluator} from "../helpers/ExpressionEvaluator";
 import {MSDSort} from "../helpers/MSDSort";
 import {Validatable} from "./Validatable";
 import {ValidationError} from "../interfaces/ValidationError";
+import {JSExecutor} from "../../../lib/models/helpers/JSExecutor";
 
 export class CommandLineToolModel implements CommandLineRunnable, Validatable {
     job: any;
     jobInputs: any;
+    exprEvaluator: ExpressionEvaluator;
 
     inputs: Array<CommandInputParameterModel>;
     outputs: Array<CommandOutputParameterModel>;
@@ -29,8 +31,10 @@ export class CommandLineToolModel implements CommandLineRunnable, Validatable {
     temporaryFailCodes: number[];
     permanentFailCodes: number[];
 
-    constructor(attr?: CommandLineTool) {
+    constructor(attr?: CommandLineTool, executor: JSExecutor) {
         this.class = "CommandLineTool";
+
+        this.exprEvaluator = new ExpressionEvaluator(executor);
 
         if (attr) {
             this.inputs  = attr.inputs.map(input => new CommandInputParameterModel(input));
@@ -133,7 +137,7 @@ export class CommandLineToolModel implements CommandLineRunnable, Validatable {
                 if (typeof baseCmd === 'string') {
                     return new CommandLinePart(baseCmd, 0, "baseCommand");
                 } else {
-                    const val = ExpressionEvaluator.evaluateD2(baseCmd, this.job);
+                    const val = this.exprEvaluator.evaluateD2(baseCmd, this.job);
                     return new CommandLinePart(val, 0, "baseCommand");
                 }
             });

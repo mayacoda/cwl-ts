@@ -21,7 +21,7 @@ describe("CommandInputParameterModel d2sb", () => {
         // array of enum
 
         // boolean
-        it("Should evaluate a boolean set to true", () => {
+        it("Should evaluateV1 a boolean set to true", () => {
             const input = new CommandInputParameterModel({
                 id: "i",
                 type: ["boolean"],
@@ -34,7 +34,7 @@ describe("CommandInputParameterModel d2sb", () => {
             expect(part.value).to.equal("--bool");
         });
 
-        it("Should evaluate a boolean set to true with valueFrom", () => {
+        it("Should evaluateV1 a boolean set to true with valueFrom", () => {
             const input = new CommandInputParameterModel({
                 id: "i",
                 type: ["boolean"],
@@ -49,7 +49,7 @@ describe("CommandInputParameterModel d2sb", () => {
             expect(part.value).to.equal("--bool baz");
         });
 
-        it("Should evaluate a boolean set to false", () => {
+        it("Should evaluateV1 a boolean set to false", () => {
             const input = new CommandInputParameterModel({
                 id: "i",
                 type: ["boolean"],
@@ -62,7 +62,7 @@ describe("CommandInputParameterModel d2sb", () => {
             expect(part.value).to.equal("");
         });
 
-        it("Should evaluate a boolean set to false with valueFrom", () => {
+        it("Should evaluateV1 a boolean set to false with valueFrom", () => {
             const input = new CommandInputParameterModel({
                 id: "i",
                 type: ["boolean"],
@@ -78,7 +78,7 @@ describe("CommandInputParameterModel d2sb", () => {
         });
 
         // array of boolean
-        it("Should evaluate an array of boolean", () => {
+        it("Should evaluateV1 an array of boolean", () => {
             const input = new CommandInputParameterModel({
                 id: "i",
                 type: {

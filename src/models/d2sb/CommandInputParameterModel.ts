@@ -180,7 +180,7 @@ export class CommandInputParameterModel implements CommandLineInjectable, Valida
     }
 
     private resolve(jobInputs: any, value: any, inputBinding: CommandLineBinding) {
-        if (inputBinding.valueFrom) {
+        if (inputBinding.valueFrom !== undefined) {
             return ExpressionEvaluator.evaluateD2(inputBinding.valueFrom, jobInputs, value);
         }
 

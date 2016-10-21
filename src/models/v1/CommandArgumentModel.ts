@@ -41,7 +41,7 @@ export class CommandArgumentModel implements CommandLineBinding, CommandLineInje
         let calculatedValue = '';
 
         if (Array.isArray(value)) {
-            // evaluate as array
+            // evaluateV1 as array
             if (this.itemSeparator) {
                 calculatedValue = prefix + separator + value.join(this.itemSeparator + " ");
             } else {
@@ -57,6 +57,6 @@ export class CommandArgumentModel implements CommandLineBinding, CommandLineInje
     }
 
     private evaluate(valueFrom: string|Expression, jobInputs: any): any {
-        return valueFrom ? ExpressionEvaluator.evaluate(valueFrom, jobInputs) : "";
+        return valueFrom ? ExpressionEvaluator.evaluateV1(valueFrom, jobInputs) : "";
     }
 }

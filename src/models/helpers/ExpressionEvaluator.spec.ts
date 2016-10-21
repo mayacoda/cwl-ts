@@ -2,23 +2,25 @@ import {ExpressionEvaluator} from "./ExpressionEvaluator";
 import {expect} from "chai";
 
 describe("ExpressionEvaluator", () => {
+    const expressionEvaluator = new ExpressionEvaluator();
+
     describe("grabExpressions", () => {
         it("should push only token for string literal", () => {
-            let tokens = ExpressionEvaluator.grabExpressions("this is just a string");
+            let tokens = expressionEvaluator.grabExpressions("this is just a string");
             expect(tokens).to.have.length(1);
             expect(tokens[0].value).to.equal("this is just a string");
             expect(tokens[0].type).to.equal("literal");
         });
 
         it("should push token for string literal if it doesn't have correct syntax for expr or func", () => {
-            let tokens = ExpressionEvaluator.grabExpressions("this is $ ( still just a string");
+            let tokens = expressionEvaluator.grabExpressions("this is $ ( still just a string");
             expect(tokens).to.have.length(1);
             expect(tokens[0].value).to.equal("this is $ ( still just a string");
             expect(tokens[0].type).to.equal("literal");
         });
 
         it("should grab a expression", () => {
-            let tokens = ExpressionEvaluator.grabExpressions("string $(22)");
+            let tokens = expressionEvaluator.grabExpressions("string $(22)");
             expect(tokens).to.have.length(2);
             expect(tokens[0].value).to.equal("string ");
             expect(tokens[0].type).to.equal("literal");
@@ -28,7 +30,7 @@ describe("ExpressionEvaluator", () => {
         });
 
         it("should grab an expression with string literal", () => {
-            let tokens = ExpressionEvaluator.grabExpressions("string ${22}");
+            let tokens = expressionEvaluator.grabExpressions("string ${22}");
             expect(tokens).to.have.length(2);
             expect(tokens[0].value).to.equal("string ");
             expect(tokens[0].type).to.equal("literal");
@@ -38,7 +40,7 @@ describe("ExpressionEvaluator", () => {
         });
 
         it("should grab a single expression", () => {
-            let tokens = ExpressionEvaluator.grabExpressions("${43}");
+            let tokens = expressionEvaluator.grabExpressions("${43}");
             expect(tokens).to.have.length(1);
             expect(tokens[0].value).to.equal("43");
             expect(tokens[0].type).to.equal("func");
@@ -46,7 +48,7 @@ describe("ExpressionEvaluator", () => {
 
 
         it("should grab two functions", () => {
-            let tokens = ExpressionEvaluator.grabExpressions("${43}${22}");
+            let tokens = expressionEvaluator.grabExpressions("${43}${22}");
             expect(tokens).to.have.length(2);
             expect(tokens[0].value).to.equal("43");
             expect(tokens[0].type).to.equal("func");
@@ -56,7 +58,7 @@ describe("ExpressionEvaluator", () => {
         });
 
         it("should grab a expression with string literal", () => {
-            let tokens = ExpressionEvaluator.grabExpressions("string $(22)");
+            let tokens = expressionEvaluator.grabExpressions("string $(22)");
             expect(tokens).to.have.length(2);
             expect(tokens[0].value).to.equal("string ");
             expect(tokens[0].type).to.equal("literal");
@@ -66,7 +68,7 @@ describe("ExpressionEvaluator", () => {
         });
 
         it("should grab two expressions", () => {
-            let tokens = ExpressionEvaluator.grabExpressions("$(43)$(22)");
+            let tokens = expressionEvaluator.grabExpressions("$(43)$(22)");
             expect(tokens).to.have.length(2);
             expect(tokens[0].value).to.equal("43");
             expect(tokens[0].type).to.equal("expr");
@@ -75,15 +77,15 @@ describe("ExpressionEvaluator", () => {
             expect(tokens[1].type).to.equal("expr");
         });
 
-        it("should be able to evaluate a nested expression", () => {
-            let tokens = ExpressionEvaluator.grabExpressions("${if (true) {return false;}}");
+        it("should be able to evaluateV1 a nested expression", () => {
+            let tokens = expressionEvaluator.grabExpressions("${if (true) {return false;}}");
             expect(tokens).to.have.length(1);
             expect(tokens[0].value).to.equal("if (true) {return false;}");
             expect(tokens[0].type).to.equal("func");
         });
 
-        it("should be able to evaluate a nested expression", () => {
-            let tokens = ExpressionEvaluator.grabExpressions("$(function() {if (true) {return false;}})");
+        it("should be able to evaluateV1 a nested expression", () => {
+            let tokens = expressionEvaluator.grabExpressions("$(function() {if (true) {return false;}})");
 
             expect(tokens).to.have.length(1);
             expect(tokens[0].value).to.equal("function() {if (true) {return false;}}");
@@ -91,11 +93,11 @@ describe("ExpressionEvaluator", () => {
         });
 
         it("should thrown an exception for improperly written expression", () => {
-            expect(ExpressionEvaluator.grabExpressions.bind(null, "$(function() {if (true) {return false;}}")).to.throw("Invalid expression");
+            expect(expressionEvaluator.grabExpressions.bind(null, "$(function() {if (true) {return false;}}")).to.throw("Invalid expression");
         });
 
         it("should allow for dollar signs if they're escaped", () => {
-            let tokens = ExpressionEvaluator.grabExpressions("\\${ escaped");
+            let tokens = expressionEvaluator.grabExpressions("\\${ escaped");
 
             expect(tokens).to.have.length(1);
             expect(tokens[0].value).to.equal("\\${ escaped");
@@ -103,40 +105,40 @@ describe("ExpressionEvaluator", () => {
         });
     });
 
-    describe("evaluate", () => {
-        it("should evaluate a string", () => {
-            expect(ExpressionEvaluator.evaluate("hello world")).to.equal("hello world");
+    describe("evaluateV1", () => {
+        it("should evaluateV1 a string", () => {
+            expect(expressionEvaluator.evaluateV1("hello world")).to.equal("hello world");
         });
 
-        it("should evaluate 3 + 3 expression", () => {
-            expect(ExpressionEvaluator.evaluate("$(3 + 3)")).to.equal(6);
+        it("should evaluateV1 3 + 3 expression", () => {
+            expect(expressionEvaluator.evaluateV1("$(3 + 3)")).to.equal(6);
         });
 
-        it("should evaluate 3 + 7 function", () => {
-            expect(ExpressionEvaluator.evaluate("${return 3 + 7;}")).to.equal(10);
+        it("should evaluateV1 3 + 7 function", () => {
+            expect(expressionEvaluator.evaluateV1("${return 3 + 7;}")).to.equal(10);
         });
 
         it("should concat values of two expressions", () => {
-            expect(ExpressionEvaluator.evaluate("$(3 + 3)$(9 + 1)")).to.equal("610");
+            expect(expressionEvaluator.evaluateV1("$(3 + 3)$(9 + 1)")).to.equal("610");
         });
 
         it("should concat value of expression and literal", () => {
-            expect(ExpressionEvaluator.evaluate("$(3 + 3) + 3")).to.equal("6 + 3");
+            expect(expressionEvaluator.evaluateV1("$(3 + 3) + 3")).to.equal("6 + 3");
         });
 
         it("should concat value of function and literal", () => {
-            expect(ExpressionEvaluator.evaluate("$(3 + 3) + ${ return 5}")).to.equal("6 + 5");
+            expect(expressionEvaluator.evaluateV1("$(3 + 3) + ${ return 5}")).to.equal("6 + 5");
         });
 
-        it("should evaluate an expression with an inputs reference", () => {
-            expect(ExpressionEvaluator.evaluate(
+        it("should evaluateV1 an expression with an inputs reference", () => {
+            expect(expressionEvaluator.evaluateV1(
                 "${ return inputs.text }",
                 {text: "hello"}
                 )).to.equal("hello");
         });
 
-        it("should evaluate an expression with a self reference", () => {
-            expect(ExpressionEvaluator.evaluate(
+        it("should evaluateV1 an expression with a self reference", () => {
+            expect(expressionEvaluator.evaluateV1(
                 "${ return self.prop }",
                 null,
                 {prop: "baz"}
@@ -145,16 +147,16 @@ describe("ExpressionEvaluator", () => {
     });
 
     describe("evaluateD2", () => {
-        it("should evaluate function body", () => {
-            expect(ExpressionEvaluator.evaluateD2({
+        it("should evaluateV1 function body", () => {
+            expect(expressionEvaluator.evaluateD2({
                 class: "Expression",
                 engine: "cwl-js-engine",
                 script: "{ return 5 + 3; }"
             })).to.equal(8);
         });
 
-        it("should evaluate an inline expression", () => {
-            expect(ExpressionEvaluator.evaluateD2({
+        it("should evaluateV1 an inline expression", () => {
+            expect(expressionEvaluator.evaluateD2({
                 class: "Expression",
                 engine: "cwl-js-engine",
                 script: " 5 + 3"

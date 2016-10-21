@@ -138,7 +138,7 @@ export class CommandInputParameterModel implements CommandInputParameter, Comman
 
     private resolveValue(jobInputs: any, value: any, inputBinding: CommandLineBinding) {
         if (inputBinding.valueFrom) {
-            return ExpressionEvaluator.evaluate(inputBinding.valueFrom, jobInputs, value);
+            return ExpressionEvaluator.evaluateV1(inputBinding.valueFrom, jobInputs, value);
         }
 
         if (value.path) {

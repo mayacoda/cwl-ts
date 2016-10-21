@@ -1,15 +1,35 @@
 import {JSExecutor} from "./JSExecutor";
+import {JSNodeExecutor} from "./JSNodeExecutor";
 import {Expression as ExpressionD2} from "../../mappings/d2sb/Expression";
 import {Expression as ExpressionV1} from "../../mappings/draft-4/Expression";
 
 export class ExpressionEvaluator {
-    public static evaluate(expr: string | ExpressionV1, job?: any, self?: any): any {
-        let results = ExpressionEvaluator.grabExpressions(expr).map(token => {
+    executor: JSExecutor;
+
+    constructor(executor?: JSExecutor) {
+        this.executor = executor || new JSNodeExecutor();
+    }
+
+    public evaluateV1(expr: string | ExpressionV1, job?: any, self?: any): any {
+        const context = {
+            inputs: job,
+            self: self
+        };
+        "${return 3 + 3} + $( 3 + 5) je neki broj";
+        "6 + 8 je neki broj";
+
+        let results = this.grabExpressions(expr).map(token => {
             switch (token.type) {
                 case "func":
-                    return JSExecutor.evaluate("v1.0", "(function() {" + token.value + "})()", job, self);
+                    this.executor.execute("(function() {" + token.value + "})()", context, (err, res) => {
+                        //???????????
+                    });
+                    break;
                 case "expr":
-                    return JSExecutor.evaluate("v1.0", token.value, job, self);
+                    this.executor.execute(token.value, context, (err, res) => {
+                        //???????????
+                    });
+                    break;
                 case "literal":
                     return token.value;
             }
@@ -22,7 +42,12 @@ export class ExpressionEvaluator {
         }
     }
 
-    public static evaluateD2(expr: string | ExpressionD2, job?: any, self?: any) {
+    public evaluateD2(expr: string | ExpressionD2, job?: any, self?: any) {
+        const context = {
+            $job: job,
+            $self: self
+        };
+
         if (typeof expr === "string") {
             return expr;
         } else {
@@ -30,11 +55,13 @@ export class ExpressionEvaluator {
                 ? "(function()" + expr.script + ")()"
                 : expr.script;
 
-            return JSExecutor.evaluate("draft-2", script, job, self);
+            this.executor.execute(script, context, (err, res) => {
+
+            });
         }
     }
 
-    public static grabExpressions(exprStr: string): exprObj[] {
+    public grabExpressions(exprStr: string): exprObj[] {
         let tokens: exprObj[] = [];
         let i                 = 0;
         let state             = State.LITERAL;

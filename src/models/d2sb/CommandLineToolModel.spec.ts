@@ -43,7 +43,7 @@ describe("CommandLineToolModel d2sb", () => {
 
     describe("getCommandLine", () => {
 
-        it("Should evaluate baseCommand with expression", () => {
+        it("Should evaluateV1 baseCommand with expression", () => {
             let tool = new CommandLineToolModel({
                 class: "CommandLineTool",
                 inputs: [],
@@ -59,7 +59,7 @@ describe("CommandLineToolModel d2sb", () => {
         });
 
 
-        it("Should evaluate baseCommand with expression that returns a number", () => {
+        it("Should evaluateV1 baseCommand with expression that returns a number", () => {
             let tool = new CommandLineToolModel({
                 class: "CommandLineTool",
                 inputs: [],
@@ -74,27 +74,27 @@ describe("CommandLineToolModel d2sb", () => {
             expect(tool.getCommandLine()).to.equal('6');
         });
 
-        it("Should evaluate BWA mem tool: General test of command line generation", () => {
+        it("Should evaluateV1 BWA mem tool: General test of command line generation", () => {
             let tool = new CommandLineToolModel(BWAMemTool.default);
             tool.setJob(BWAMemJob.default);
 
             expect(tool.getCommandLine()).to.equal(`python bwa mem -t 4 -I 1,2,3,4 -m 3 chr20.fa example_human_Illumina.pe_1.fastq example_human_Illumina.pe_2.fastq`);
         });
 
-        it("Should evaluate BWM mem tool: Test nested prefixes with arrays", () => {
+        it("Should evaluateV1 BWM mem tool: Test nested prefixes with arrays", () => {
             let tool = new CommandLineToolModel(BindingTestTool.default);
             tool.setJob(BWAMemJob.default);
 
             expect(tool.getCommandLine()).to.equal(`python bwa mem chr20.fa -XXX -YYY example_human_Illumina.pe_1.fastq -YYY example_human_Illumina.pe_2.fastq`);
         });
 
-        it("Should evaluate BamTools Index from sbg", () => {
+        it("Should evaluateV1 BamTools Index from sbg", () => {
             let tool = new CommandLineToolModel(<CommandLineTool> BamtoolsIndex.default);
 
             expect(tool.getCommandLine()).to.equal('/opt/bamtools/bin/bamtools index -in input_bam.bam');
         });
 
-        it("Should evaluate BamTools Split from sbg", () => {
+        it("Should evaluateV1 BamTools Split from sbg", () => {
             let tool = new CommandLineToolModel(BamtoolsSplit.default);
 
             expect(tool.getCommandLine()).to.equal('/opt/bamtools/bin/bamtools split -in input/input_bam.ext -refPrefix refp -tagPrefix tagp -stub input_bam.splitted -mapped -paired -reference -tag tag');

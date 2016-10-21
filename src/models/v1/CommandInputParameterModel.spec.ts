@@ -76,7 +76,7 @@ describe("CommandInputParameterModel v1", () => {
             }).to.throw("Mismatched value and type definition");
         });
 
-        it("Should evaluate a string value without prefix", () => {
+        it("Should evaluateV1 a string value without prefix", () => {
             let input = new CommandInputParameterModel({
                 type: "string",
                 id: "test1",
@@ -87,7 +87,7 @@ describe("CommandInputParameterModel v1", () => {
             expect((<CommandLinePart> part).value).to.equal("test");
         });
 
-        it("Should evaluate an int value without prefix", () => {
+        it("Should evaluateV1 an int value without prefix", () => {
             let input = new CommandInputParameterModel({
                 type: "int",
                 id: "test1",
@@ -98,7 +98,7 @@ describe("CommandInputParameterModel v1", () => {
             expect((<CommandLinePart> part).value).to.equal('3');
         });
 
-        it("Should evaluate an float value without prefix", () => {
+        it("Should evaluateV1 an float value without prefix", () => {
             let input = new CommandInputParameterModel({
                 type: "float",
                 id: "test1",
@@ -110,7 +110,7 @@ describe("CommandInputParameterModel v1", () => {
             expect((<CommandLinePart> part).sortingKey).to.have.length(1);
         });
 
-        it("Should evaluate double value with prefix", () => {
+        it("Should evaluateV1 double value with prefix", () => {
             let input = new CommandInputParameterModel({
                 type: "double",
                 id: "test1",
@@ -125,7 +125,7 @@ describe("CommandInputParameterModel v1", () => {
         /**
          * ARRAYS
          */
-        it("Should evaluate an array of strings", () => {
+        it("Should evaluateV1 an array of strings", () => {
             let input = new CommandInputParameterModel({
                 type: "string[]",
                 id: "test1",
@@ -137,7 +137,7 @@ describe("CommandInputParameterModel v1", () => {
             expect((<CommandLinePart> part).sortingKey).to.have.length(1);
         });
 
-        it("Should evaluate an array of strings with a prefix", () => {
+        it("Should evaluateV1 an array of strings with a prefix", () => {
             let input = new CommandInputParameterModel({
                 type: "string[]",
                 id: "test1",
@@ -149,7 +149,7 @@ describe("CommandInputParameterModel v1", () => {
             expect((<CommandLinePart> part).sortingKey).to.have.length(1);
         });
 
-        it("Should evaluate an array of strings with a prefix and separate == false", () => {
+        it("Should evaluateV1 an array of strings with a prefix and separate == false", () => {
             let input = new CommandInputParameterModel({
                 type: "string[]",
                 id: "test1",
@@ -161,7 +161,7 @@ describe("CommandInputParameterModel v1", () => {
             expect((<CommandLinePart> part).sortingKey).to.have.length(1);
         });
 
-        it("Should evaluate an array of strings with a prefix and itemSeparator", () => {
+        it("Should evaluateV1 an array of strings with a prefix and itemSeparator", () => {
             let input = new CommandInputParameterModel({
                 type: "string[]",
                 id: "test1",
@@ -173,7 +173,7 @@ describe("CommandInputParameterModel v1", () => {
             expect((<CommandLinePart> part).sortingKey).to.have.length(1);
         });
 
-        it("Should evaluate an array of files with prefix and separator", () => {
+        it("Should evaluateV1 an array of files with prefix and separator", () => {
             let input = new CommandInputParameterModel({
                 type: "File[]",
                 id: "test1",
@@ -188,7 +188,7 @@ describe("CommandInputParameterModel v1", () => {
         /**
          * PRIMITIVE WITH PREFIX
          */
-        it("Should evaluate a primitive type with a prefix", () => {
+        it("Should evaluateV1 a primitive type with a prefix", () => {
             let input = new CommandInputParameterModel({
                 type: "int",
                 id: "test1",
@@ -199,7 +199,7 @@ describe("CommandInputParameterModel v1", () => {
             expect((<CommandLinePart> part).value).to.equal("p- 44");
         });
 
-        it("Should evaluate a File type", () => {
+        it("Should evaluateV1 a File type", () => {
             let input = new CommandInputParameterModel({
                 type: "File",
                 id: "test1",
@@ -214,7 +214,7 @@ describe("CommandInputParameterModel v1", () => {
         /**
          * RECORDS
          */
-        it("Should evaluate record with fields", () => {
+        it("Should evaluateV1 record with fields", () => {
             let input = new CommandInputParameterModel({
                 type: {
                     type: "record", fields: [
@@ -241,7 +241,7 @@ describe("CommandInputParameterModel v1", () => {
         });
 
 
-        it("Should evaluate record with fields type File array", () => {
+        it("Should evaluateV1 record with fields type File array", () => {
             let input = new CommandInputParameterModel({
                 type: {
                     type: "record",
@@ -319,7 +319,7 @@ describe("CommandInputParameterModel v1", () => {
             expect(part.value).to.equal("foo -o 6 boo");
         });
 
-        it("should evaluate inputBinding valueFrom that is a string", () => {
+        it("should evaluateV1 inputBinding valueFrom that is a string", () => {
             const input = new CommandInputParameterModel({
                 type: "int",
                 id: "test1",
@@ -332,7 +332,7 @@ describe("CommandInputParameterModel v1", () => {
             expect(part.value).to.equal("p- value");
         });
 
-        it("should evaluate inputBinding valueFrom that is an expression", () => {
+        it("should evaluateV1 inputBinding valueFrom that is an expression", () => {
             const input = new CommandInputParameterModel({
                 type: "int",
                 id: "test1",
@@ -345,7 +345,7 @@ describe("CommandInputParameterModel v1", () => {
             expect(part.value).to.equal("p- 5");
         });
 
-        it("should evaluate inputBinding valueFrom that is a function", () => {
+        it("should evaluateV1 inputBinding valueFrom that is a function", () => {
             const input = new CommandInputParameterModel({
                 type: "int",
                 id: "test1",
@@ -359,7 +359,7 @@ describe("CommandInputParameterModel v1", () => {
         });
 
 
-        it("should evaluate inputBinding valueFrom that references inputs", () => {
+        it("should evaluateV1 inputBinding valueFrom that references inputs", () => {
             const input = new CommandInputParameterModel({
                 type: "int",
                 id: "test1",
@@ -372,7 +372,7 @@ describe("CommandInputParameterModel v1", () => {
             expect(part.value).to.equal("p- 89");
         });
 
-        it("should evaluate inputBinding valueFrom that references self", () => {
+        it("should evaluateV1 inputBinding valueFrom that references self", () => {
             const input = new CommandInputParameterModel({
                 type: "int",
                 id: "test1",
